@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { withRouter } from "react-router-dom";
 import { axiosWithAuth as api } from "../utils/api";
 
 const initialColor = {
@@ -7,8 +7,8 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }, props) => {
-  console.log(colors, "the colors");
+const ColorList = ({ colors, updateColors}) => {
+  // console.log(history, "the history");
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -23,7 +23,7 @@ const ColorList = ({ colors, updateColors }, props) => {
     api().put(`/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         setEditing(false)
-        props.location.reload()
+        window.location.reload()
       })
       .then(err => {
         console.log(err)
@@ -36,12 +36,13 @@ const ColorList = ({ colors, updateColors }, props) => {
 
   // console.log(props, "here are my props")
 
+  console.log(colors, "my colors")
   const deleteColor = color => {
-    // make a delete request to delete this color
+
     api().delete(`/api/colors/${color.id}`)
       .then(res => {
         console.log("Color was deleted!")
-        props.location.reload()
+        window.location.reload()
       })
       .catch(err => {
         console.log(err)
@@ -107,4 +108,4 @@ const ColorList = ({ colors, updateColors }, props) => {
   );
 };
 
-export default ColorList;
+export default withRouter(ColorList);
